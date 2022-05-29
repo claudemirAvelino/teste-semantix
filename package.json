@@ -4,6 +4,7 @@
   "description": "Teste de capacidade",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/claudemirAvelino/teste-semantix/issues"
   },
-  "homepage": "https://github.com/claudemirAvelino/teste-semantix#readme"
+  "homepage": "https://github.com/claudemirAvelino/teste-semantix#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "mongodb": "^4.6.0",
+    "mongoose": "^6.3.4",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
 }
