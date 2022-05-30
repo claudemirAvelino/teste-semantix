@@ -7,65 +7,65 @@ class Main {
     }
 
     start() {
-        let users;
+        let users = new Array;
 
-         getAllUsers(1).then(({ data })  => {
-            xml2js.parseString(data, (err, result) => {
-                if(err) {
-                    throw err;
-                }
-                const foundUsers = result?.data?.usersList[0]?.item
-                if(foundUsers.length > 0){
-                    const usersRequested = foundUsers?.map(async ({ id, firstName, lastName, email }) => {
-                        let user = {
-                            fullName: `${firstName[0]} ${lastName[0]}`,
-                            email: email[0],
-                            address: '',
-                            addressNumber: null,
-                            phoneNumber: ''
-                        }
+         const getAll = (page) => {
+             getAllUsers(page).then( ({ data })  => {
+                xml2js.parseString(data, async (err, result) => {
+                    if(err) {
+                        throw err;
+                    }
+                    const foundUsers = result?.data?.usersList[0]?.item
+                    if(foundUsers.length > 0){
+                        for await (let [index, user] of foundUsers.entries()){
+                            let address;
+                            const { id,  firstName, lastName, email } = user;
+                            console.log('users', index, id, firstName)
 
-                        getAddressById(id).then( ({ data: dataAddress }) => {
-                            //console.log('dataAddress', dataAddress)
-                            xml2js.parseString(dataAddress, (errAddress, resultAddress) => {
-                                const address = resultAddress.data.item.find(address => address.id == id.toString())
-                                user.address = address.street[0];
-                                user.addressNumber = address.number[0]._;
-
-                                getContactById(id).then(({ data: dataContact }) => {
-                                    xml2js.parseString(dataContact, (errContatc, resultContact) => {
-                                        user.phoneNumber = resultContact.data.item[0].phoneNumber[0]
-                                    })
-
-                                    console.log('USER', user)
-
-                                    return user;
-                                }).catch(err => {
-                                    console.log('erro getContactById', err)
-                                    if(err.response.status === 429){
-                                        err.response.data.retryAfter
-                                    }
+                            try {
+                                const { data: dataAddress } = await getAddressById(id)
+                                xml2js.parseString(dataAddress, (errAddress, resultAddress) => {
+                                    address = resultAddress.data.item.find(address => address.id == id.toString())
                                 })
-                            })
-                        }).catch(err => {
-                            if(err.response.status === 429){
-                                err.response.data.retryAfter
+                            }catch (err) {
+                                console.log('erro getAddress', err.message)
                             }
-                            console.log('erro getAddresById', err)
-                        })
-                    })
-                    users.push(...usersRequested);
-                    getAllUsers(2)
-                }
-            });
-            //console.log('users', usersJson)
 
-        }).catch((error) => {
-            if(error?.response?.status === 429){
-                error.response.data.retryAfter
-            }
-            console.error('getAllUsers', error);
-        });
+                            user = {
+                                fullName: `${firstName[0]} ${lastName[0]}`,
+                                email: email[0],
+                                address: address?.street[0],
+                                addressNumber: address?.number[0]._,
+                                phoneNumber: ''
+                            }
+
+                            try {
+                                const { data: dataContact } = await getContactById(id);
+                                xml2js.parseString(dataContact, (errContatc, resultContact) => {
+                                    user.phoneNumber = resultContact.data.item[0].phoneNumber[0]
+                                })
+                            }catch (err) {
+                                console.log('erro getContatc', err)
+                            }
+
+                            if( (index + 1) === foundUsers.length){
+                                getAll(page + 1);
+                            }
+
+                            users.push(user);
+                        }
+                        console.log('QUANTIDADE DE USUÁRIOS', users.length)
+                    }
+
+                });
+
+            }).catch((error) => {
+                if(error?.response?.status === 429){
+                    console.error('getAllUsers falta esse tempo para executar novamente', error.response.data.retryAfter);
+                }
+            })
+         }
+         getAll(1);
     }
 }
 

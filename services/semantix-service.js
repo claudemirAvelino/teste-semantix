@@ -11,25 +11,28 @@ const getOptions = (url, params = {}) => {
     }
 }
 
-const request = async (options) => {
+const request = async (options, request) => {
     await delay(2000)
+    var date = new Date()
+    console.log('tá fazendo request', date.getSeconds(), request)
     return axios.request(options);
 }
 
 const getAllUsers = (page) => {
-    const options = getOptions('https://linkapi-desafio-tech.gateway.linkapi.solutions/v1/users', {limit: '10', page})
+    const options = getOptions('https://linkapi-desafio-tech.gateway.linkapi.solutions/v1/users', {limit: '5', page})
 
-    return request(options)
+    return request(options, 'getAllUsers')
 }
 
-const getAddressById = (id) => {
+const getAddressById = async (id) => {
     const options = getOptions(`https://linkapi-desafio-tech.gateway.linkapi.solutions/v1/users/${id}/address`)
-    return request(options);
+    return request(options, 'getAddressById');
 }
 
-const getContactById = (id) => {
+const getContactById = async (id) => {
     const options = getOptions(`https://linkapi-desafio-tech.gateway.linkapi.solutions/v1/users/${id}/contacts`)
-    return request(options);
+    console.log('getContactById e o id', id)
+    return request(options, 'getContactById');
 }
 
 const delay = async (delay = 1000) => {
