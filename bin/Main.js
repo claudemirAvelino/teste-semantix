@@ -16,7 +16,7 @@ class Main {
                         throw err;
                     }
                     const foundUsers = result?.data?.usersList[0]?.item
-                    if(foundUsers.length > 0){
+                    if(foundUsers?.length > 0){
                         for await (let [index, user] of foundUsers.entries()){
                             let address;
                             const { id,  firstName, lastName, email } = user;
@@ -25,7 +25,7 @@ class Main {
                             try {
                                 const { data: dataAddress } = await getAddressById(id)
                                 xml2js.parseString(dataAddress, (errAddress, resultAddress) => {
-                                    address = resultAddress.data.item.find(address => address.id == id.toString())
+                                    address = resultAddress?.data?.item?.find(address => address.id == id.toString())
                                 })
                             }catch (err) {
                                 console.log('erro getAddress', err.message)
@@ -42,7 +42,7 @@ class Main {
                             try {
                                 const { data: dataContact } = await getContactById(id);
                                 xml2js.parseString(dataContact, (errContatc, resultContact) => {
-                                    user.phoneNumber = resultContact.data.item[0].phoneNumber[0]
+                                    user.phoneNumber = resultContact?.data?.item[0]?.phoneNumber[0]
                                 })
                             }catch (err) {
                                 console.log('erro getContatc', err)
@@ -54,7 +54,9 @@ class Main {
 
                             users.push(user);
                         }
+                    }else {
                         console.log('QUANTIDADE DE USUÁRIOS', users.length)
+                        //fazer aqui a função de cronjob
                     }
 
                 });
@@ -62,11 +64,23 @@ class Main {
             }).catch((error) => {
                 if(error?.response?.status === 429){
                     console.error('getAllUsers falta esse tempo para executar novamente', error.response.data.retryAfter);
+                    getAll(page)
+                }else {
+                    console.log('erro getAllUsers', error.message)
+                    getAll(page);
                 }
             })
          }
          getAll(1);
     }
+
+    /*const getAddress = () => {
+
+    }
+
+    const getContatc = () => {
+
+    }*/
 }
 
 module.exports = new Main();
