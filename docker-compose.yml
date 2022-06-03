@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  redis:
+    container_name: "redis"
+    image: redis:alpine
+    command: redis-server --save /usr/local/etc/redis/redis.conf --requirespass root
+    ports:
+      - "6377:6377"
+    volumes:
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
