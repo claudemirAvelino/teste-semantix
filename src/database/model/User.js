@@ -12,13 +12,12 @@ const userSchema = new mongoose.Schema({
 mongoose.model('User', userSchema);
 const User = mongoose.model('User')
 
-const user = new User({
-    fullName: 'sdsd',
-    email: 'teste',
-    address: 'dsdas',
-    addressNumber: 1,
-    phoneNumber: '23432'
-})
-console.log('antes de salvar');
-user.save()
-console.log('depois de salvar');
+const save = (payload) => {
+    const user = new User(payload)
+
+    user.save();
+}
+
+module.exports = {
+    save
+};

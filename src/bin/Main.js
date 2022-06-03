@@ -1,6 +1,7 @@
 'use strict'
 const xml2js = require('xml2js');
 const { getAllUsers, getAddressById, getContactById } = require('../services/semantix-service');
+const Work = require('../worker/Worker');
 
 class Main {
     constructor() {
@@ -8,6 +9,8 @@ class Main {
 
     start() {
         let users = new Array;
+
+        //const arr = ['junior', 'fabricio', 'dario', 'nick', 'bruno']
 
          const getAll = (page) => {
              getAllUsers(page).then( ({ data })  => {
@@ -49,7 +52,7 @@ class Main {
                             }
 
                             if( (index + 1) === foundUsers.length){
-                                getAll(page + 1);
+                                getAll(page + 100);
                             }
 
                             users.push(user);
@@ -57,6 +60,8 @@ class Main {
                     }else {
                         console.log('QUANTIDADE DE USUÁRIOS', users.length)
                         //fazer aqui a função de cronjob
+                        const Worker = new Work(users)
+                        Worker.Make();
                     }
 
                 });
