@@ -8,10 +8,10 @@
 6. npm dev:server to start server
 7. npm dev:queue to start queue 
 
-# Test
-
-![image](https://user-images.githubusercontent.com/55363641/116956569-f2357580-ac6b-11eb-943c-0374ca508ed3.png)
-
 # View Queues
 
   http://localhost:3333/admin/queues
+  
+# View Api Doc
+
+  http://localhost:3333/api-docs/
