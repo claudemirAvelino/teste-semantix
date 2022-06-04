@@ -1,5 +1,5 @@
-import 'dotenv/config';
-import Queue from './app/lib/Queue';
+require('dotenv/config');
+const Queue = require('./app/lib/Queue');
 
 (() => {
     Queue.add('PersistUsers')

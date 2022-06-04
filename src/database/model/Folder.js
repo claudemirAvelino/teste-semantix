@@ -9,17 +9,17 @@ const folderSchema = new mongoose.Schema({
 mongoose.model('Folder', folderSchema);
 const Folder = mongoose.model('Folder')
 
-const save = (payload) => {
+const saveFolder = (payload) => {
     const folder = new Folder(payload)
 
     folder.save();
 }
 
-const find = async (name) => {
+const findFolder = async (name) => {
     return await Folder.find({name})
 }
 
 module.exports = {
-    save,
-    find
-};
+    saveFolder,
+    findFolder
+}

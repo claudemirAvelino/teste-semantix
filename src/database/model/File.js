@@ -10,17 +10,17 @@ const fileSchema = new mongoose.Schema({
 mongoose.model('File', fileSchema);
 const File = mongoose.model('File')
 
-const save = (payload) => {
+const saveFile = (payload) => {
     const folder = new File(payload)
 
     folder.save();
 }
 
-const find = async (name) => {
+const findFile = async (name) => {
     return await File.find({name})
 }
 
 module.exports = {
-    save,
-    find
-};
+    saveFile,
+    findFile
+}

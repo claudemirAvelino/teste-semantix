@@ -1,7 +1,7 @@
-import Queue from 'bull';
-import redisConfig from '../../config/redis';
+const Queue = require('bull');
+const redisConfig = require('../../config/redis.js');
 
-import * as jobs from '../jobs';
+const jobs = require('../jobs/index.js');
 
 const queues = Object.values(jobs).map(job => ({
     bull: new Queue(job.key, redisConfig),
@@ -27,7 +27,7 @@ function process() {
     })
 }
 
-export default {
+module.exports = {
     queues,
     add,
     process,

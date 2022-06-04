@@ -1,1 +1,3 @@
-export { default as PersistUsers } from "./PersistUsers";
+const PersistUsers = require("./PersistUsers.js");
+
+module.exports = [{...PersistUsers}]

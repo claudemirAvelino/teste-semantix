@@ -1,5 +1,4 @@
-
-export default {
+module.exports = {
     key: 'PersistUsers',
     options: {
         attempts: 1,
