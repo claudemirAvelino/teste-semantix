@@ -1,0 +1,88 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API teste Semantix"
+  },
+  "paths": {
+    "/create-folder": {
+      "post": {
+        "summary": "Criação de pasta",
+        "description": "Essa rota será responsável por criar pasta na plataforma Go File",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Folder"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload-file": {
+      "post": {
+        "summary": "Upload de arquivos",
+        "description": "Essa rota será responsável por upar um arquivo na pasta desejada",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/File"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete-file": {
+      "post": {
+        "summary": "Deleção de arquivos",
+        "description": "Essa rota será responsável por deletar o arquivo desejado",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Folder": {
+        "type": "object",
+        "properties": {
+          "folderName": {
+            "type": "string"
+          }
+        }
+      },
+      "File": {
+        "type": "object",
+        "properties": {
+          "folderName": {
+            "type": "string"
+          },
+          "myfile": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Delete": {
+        "type": "object",
+        "properties": {
+          "folderName": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
